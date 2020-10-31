@@ -27,7 +27,7 @@ void DistributionOfWords::attachFile(const std::string &fileName) {
     input.open(fileName);
 
     if (!input) {
-        std::cout << "Error opening the input file" << std::endl;
+        throw std::invalid_argument("Can not open input file");
     }
     std::string line;
     while (getline(input, line)) {
@@ -36,7 +36,7 @@ void DistributionOfWords::attachFile(const std::string &fileName) {
     input.close();
 }
 
-void DistributionOfWords::addDataToMultimapByRepetitions() {
+void DistributionOfWords::addDataToMultimapByRepetitions(std::multimap<int, std::string> &wordByRepetitions) {
     for (auto currentRepetitionsByWord = repetitionsByWord.rbegin();
          currentRepetitionsByWord != repetitionsByWord.rend(); ++currentRepetitionsByWord) {
         wordByRepetitions.insert(
@@ -50,9 +50,10 @@ void DistributionOfWords::sendForOutputInCSV(const std::string &fileName) {
     std::ofstream output;
     output.open(fileName);
     if (!output) {
-        std::cout << "Error opening the output file" << std::endl;
+        throw std::invalid_argument("Can not open output file");
     }
-    addDataToMultimapByRepetitions();
+    std::multimap<int, std::string> wordByRepetitions;
+    addDataToMultimapByRepetitions(wordByRepetitions);
     for (auto currentWordByRepetitions = wordByRepetitions.rbegin();
          currentWordByRepetitions != wordByRepetitions.rend(); ++currentWordByRepetitions) {
         output << currentWordByRepetitions->second << ',' << currentWordByRepetitions->first << ','

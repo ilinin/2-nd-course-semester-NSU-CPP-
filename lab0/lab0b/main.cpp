@@ -6,8 +6,13 @@ int main(int argc, char *argv[]) {
         return 0;
     }
     DistributionOfWords fileParser;
-    for (int idx = 1; idx < argc - 1; ++idx) {
-        fileParser.attachFile(argv[idx]);
+    try {
+        for (int idx = 1; idx < argc - 1; ++idx) {
+            fileParser.attachFile(argv[idx]);
+        }
+        fileParser.sendForOutputInCSV(argv[argc - 1]);
     }
-    fileParser.sendForOutputInCSV(argv[argc - 1]);
+    catch (std::exception &ex) {
+        std::cerr << ex.what() << std::endl;
+    }
 }

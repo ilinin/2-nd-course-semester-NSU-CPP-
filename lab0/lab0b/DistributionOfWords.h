@@ -11,13 +11,11 @@
 class DistributionOfWords {
     std::map<std::string, int> repetitionsByWord;
 
-    std::multimap<int, std::string> wordByRepetitions;
-
     int wordsCounter;
 
     void parseLine(const std::string currentLine);
 
-    void addDataToMultimapByRepetitions();
+    void addDataToMultimapByRepetitions(std::multimap<int, std::string> &wordByRepetitions);
 
 public:
     DistributionOfWords();
