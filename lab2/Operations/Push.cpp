@@ -9,23 +9,20 @@ void Push::execute(std::list<std::string> &args, Context &ctx) const {
     }
 
     std::string id = args.front();
-    auto isNumber = [id]() -> bool {
-        for (char c : id) {
-            if (!isdigit(c)) {
-                return false;
-            }
+    try{
+        size_t size = 0;
+        double number  = std::stod(id.c_str(), &size);
+        if (size != args.front().size()) {
+            throw std::exception();
         }
-
-        return true;
-    }();
-
-    if (isNumber) {
-        ctx.operands.push(atof(id.c_str()));
-        return;
-    } else if (ctx.defines.find(id) != ctx.defines.end()) {
-        ctx.operands.push(ctx.defines[id]);
+        ctx.operands.push(number);
         return;
     }
-
-    throw WrongInput();
+    catch(std::exception){
+        if (ctx.defines.find(id) != ctx.defines.end()) {
+            ctx.operands.push(ctx.defines[id]);
+            return;
+        }
+        else throw WrongInput();
+    }
 }

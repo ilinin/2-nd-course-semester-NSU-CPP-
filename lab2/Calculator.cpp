@@ -1,11 +1,11 @@
 #include "Calculator.h"
 #include "InputReader.h"
 
-double StackCalculator::evaluate(std::istream& is) {
+double StackCalculator::evaluate(std::istream &is) {
     Context ctx;
 
     size_t lineCounter = 1;
-    std::list <std::string> curArgs;
+    std::list<std::string> curArgs;
     while (LineReader::readNextLine(is, curArgs)) {
         try {
             char symb = curArgs.front()[0];
@@ -16,10 +16,10 @@ double StackCalculator::evaluate(std::istream& is) {
                 continue;
             }
 
-            std::unique_ptr<IOperation> op (OperationFactory::getInstance().createInstance(curArgs.front()));
+            std::unique_ptr<IOperation> op(OperationFactory::getInstance().createInstance(curArgs.front()));
             curArgs.pop_front();
-            op -> execute(curArgs, ctx);
-        } catch (EvaluatorException& ex) {
+            op->execute(curArgs, ctx);
+        } catch (EvaluatorException &ex) {
             std::cout << ex.what() << " Line " << lineCounter << "." << std::endl;
 
             curArgs.clear();
@@ -35,7 +35,7 @@ double StackCalculator::evaluate(std::istream& is) {
     return ctx.operands.top();
 }
 
-bool LineReader::readNextLine(std::istream& is, std::list <std::string> &args) {
+bool LineReader::readNextLine(std::istream &is, std::list<std::string> &args) {
     std::string curLine;
     if (!getline(is, curLine)) {
         return false;
@@ -46,7 +46,7 @@ bool LineReader::readNextLine(std::istream& is, std::list <std::string> &args) {
     return true;
 }
 
-void LineReader::splitString(std::list<std::string> &args, const std::string& line) {
+void LineReader::splitString(std::list<std::string> &args, const std::string &line) {
     size_t curBeginning = 0;
     for (size_t i = 0; i < line.size(); ++i) {
         if (line[i] == ' ' && i - curBeginning > 0) {

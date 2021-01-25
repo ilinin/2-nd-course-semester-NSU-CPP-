@@ -12,17 +12,7 @@ void Define::execute(std::list<std::string> &args, Context &ctx) const {
     std::string numberToDefine = args.back();
     auto wrongId = [id]() -> bool {
         for (char i : id) {
-            if (isdigit(i)) {
-                return false;
-            }
-        }
-
-        return true;
-    }();
-
-    auto wrongNumber = [id]() -> bool {
-        for (char i : id) {
-            if (!isdigit(i)) {
+            if (!isalpha(i)) {
                 return false;
             }
         }
@@ -34,9 +24,14 @@ void Define::execute(std::list<std::string> &args, Context &ctx) const {
         throw IdentifyerFormat();
     }
 
-    if (wrongNumber) {
+    try{
+        size_t size = 0;
+        ctx.defines[id] = std::stod(numberToDefine.c_str(), &size);
+        if (size != args.front().size()) {
+            throw std::exception();
+        }
+    }
+    catch(std::exception){
         throw NumberFormat();
     }
-
-    ctx.defines[id] = atof(numberToDefine.c_str());
 }
